@@ -63,3 +63,13 @@ void* getData(struct node* arrayList, unsigned int index) {
 	}
 	return (*selectedNode).data;
 }
+
+unsigned int getLenth(struct node* arrayList) {
+	unsigned int lenth = 0;
+	struct node* currentNode = arrayList;
+	while (currentNode != NULL) {
+		lenth++;
+		currentNode = (*currentNode).next;
+	}
+	return lenth;
+}
