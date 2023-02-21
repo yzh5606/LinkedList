@@ -2,5 +2,5 @@
 
 struct node;
 
-struct node* newArrayList(int arr[], unsigned int lenth);
-int getValue(struct node* arrayList, unsigned int index);
+struct node* newArrayList(void* data, unsigned int lenth, unsigned int size);
+void* getData(struct node* arrayList, unsigned int index);

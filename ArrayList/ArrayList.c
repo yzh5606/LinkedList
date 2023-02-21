@@ -1,14 +1,16 @@
 #include <stdlib.h>
+#include "ArrayList.h"
 
 struct node {
-	int value;
+	void* data;
 	struct node* next;
 };
 
-struct node* newArrayList(int arr[], unsigned int lenth) {
+struct node* newArrayList(void* data, unsigned int lenth, unsigned int size) {
 	struct node* arrayList;
 	struct node* thisNode;
 	struct node* previousNode;
+	char* reader = (char*)data;
 	// first node
 	if (lenth == 0) {
 		return NULL;
@@ -17,7 +19,16 @@ struct node* newArrayList(int arr[], unsigned int lenth) {
 	if (thisNode == NULL) {
 		return NULL;
 	}
-	(*thisNode).value = arr[0];
+	(*thisNode).data = calloc(1, size);
+	if ((*thisNode).data == NULL) {
+		// TODO: fall back
+		return NULL;
+	}
+	for (unsigned int i = 0; i < size; i++) {
+		char* writer = (char*)(*thisNode).data;
+		*(writer + i) = *reader;
+		reader++;
+	}
 	previousNode = thisNode;
 	arrayList = thisNode;
 	// else nodes
@@ -29,17 +40,26 @@ struct node* newArrayList(int arr[], unsigned int lenth) {
 				return NULL;
 			}
 			(*previousNode).next = thisNode;
-			(*thisNode).value = arr[i];
+			(*thisNode).data = calloc(1, size);
+			if ((*thisNode).data == NULL) {
+				// TODO: fall back
+				return NULL;
+			}
+			for (unsigned int i = 0; i < size; i++) {
+				char* writer = (char*)(*thisNode).data;
+				*(writer + i) = *reader;
+				reader++;
+			}
 			previousNode = thisNode;
 		}
 	}
 	return arrayList;
 }
 
-int getValue(struct node* arrayList, unsigned int index) {
+void* getData(struct node* arrayList, unsigned int index) {
 	struct node* selectedNode = arrayList;
 	for (unsigned int i = 0; i < index; i++) {
 		selectedNode = (*selectedNode).next;
 	}
-	return (*selectedNode).value;
+	return (*selectedNode).data;
 }
