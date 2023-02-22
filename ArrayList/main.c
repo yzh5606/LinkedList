@@ -1,9 +1,11 @@
 #include <stdio.h>
-#include "ArrayList.h"
+#include "LinkedList.h"
 
 int main() {
 	int arr[4] = { 1,2,3,4 };
-	struct node* arrList = newArrayList(arr, 4, sizeof(int));
+	struct node* arrList = newLinkedList(arr, 4, sizeof(int));
 	printf("%d\n", *((int*)getData(arrList, 0)));
-	printf("%u\n", getLenth(arrList));
+	printf("%u\n", getLength(arrList));
+	deleteNode(arrList, 1, 2);
+	printf("%d\n", *((int*)getData(arrList, 1)));
 }

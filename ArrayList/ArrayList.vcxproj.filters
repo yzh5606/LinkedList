@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayList.c">
+    <ClCompile Include="LinkedList.c">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.c">
@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayList.h">
+    <ClInclude Include="LinkedList.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
