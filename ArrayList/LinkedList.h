@@ -7,3 +7,4 @@ void* getData(struct node* linkedList, unsigned int index);
 unsigned int getLength(struct node* linkedList);
 void deleteNode(struct node* linkedList, unsigned int beginIndex, unsigned int length);
 struct node* getNode(struct node* linkedList, unsigned int index);
+void deleteLinkedList(struct node* linkedList);

@@ -21,7 +21,7 @@ struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
 	}
 	(*thisNode).data = calloc(1, size);
 	if ((*thisNode).data == NULL) {
-		// TODO: fall back
+		deleteLinkedList(thisNode);
 		return NULL;
 	}
 	for (unsigned int i = 0; i < size; i++) {
@@ -36,13 +36,13 @@ struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
 		for (unsigned int i = 1; i < length; i++) {
 			thisNode = (struct node*)calloc(1, sizeof(struct node));
 			if (thisNode == NULL) {
-				// TODO: fall back
+				deleteLinkedList(linkedList);
 				return NULL;
 			}
 			(*previousNode).next = thisNode;
 			(*thisNode).data = calloc(1, size);
 			if ((*thisNode).data == NULL) {
-				// TODO: fall back
+				deleteLinkedList(linkedList);
 				return NULL;
 			}
 			for (unsigned int i = 0; i < size; i++) {
@@ -94,4 +94,17 @@ struct node* getNode(struct node* linkedList, unsigned int index) {
 		selectedNode = (*selectedNode).next;
 	}
 	return selectedNode;
+}
+
+void deleteLinkedList(struct node* linkedList) {
+	struct node* currentNode = NULL;
+	struct node* nextNode = linkedList;
+	do {
+		currentNode = nextNode;
+		nextNode = (*currentNode).next;
+		if ((*currentNode).data != NULL) {
+			free((*currentNode).data);
+		}
+		free(currentNode);
+	} while (nextNode != NULL);
 }
