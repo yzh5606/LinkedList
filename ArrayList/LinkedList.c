@@ -6,11 +6,11 @@ struct node {
 	struct node* next;
 };
 
-struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
+LinkedList newLinkedList(void* pdata, unsigned int size, unsigned int length) {
 	struct node* linkedList;
 	struct node* thisNode;
 	struct node* previousNode;
-	char* reader = (char*)data;
+	char* reader = (char*)pdata;
 	// first node
 	if (length == 0) {
 		return NULL;
@@ -21,7 +21,7 @@ struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
 	}
 	(*thisNode).data = calloc(1, size);
 	if ((*thisNode).data == NULL) {
-		deleteLinkedList(thisNode);
+		deleteLinkedList(&thisNode);
 		return NULL;
 	}
 	for (unsigned int i = 0; i < size; i++) {
@@ -36,13 +36,13 @@ struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
 		for (unsigned int i = 1; i < length; i++) {
 			thisNode = (struct node*)calloc(1, sizeof(struct node));
 			if (thisNode == NULL) {
-				deleteLinkedList(linkedList);
+				deleteLinkedList(&linkedList);
 				return NULL;
 			}
 			(*previousNode).next = thisNode;
 			(*thisNode).data = calloc(1, size);
 			if ((*thisNode).data == NULL) {
-				deleteLinkedList(linkedList);
+				deleteLinkedList(&linkedList);
 				return NULL;
 			}
 			for (unsigned int i = 0; i < size; i++) {
@@ -56,11 +56,11 @@ struct node* newLinkedList(void* data, unsigned int length, unsigned int size) {
 	return linkedList;
 }
 
-void* getData(struct node* linkedList, unsigned int index) {
+void* getData(LinkedList linkedList, unsigned int index) {
 	return (*(getNode(linkedList, index))).data;
 }
 
-unsigned int getLength(struct node* linkedList) {
+unsigned int getLength(LinkedList linkedList) {
 	unsigned int length = 0;
 	struct node* currentNode = linkedList;
 	while (currentNode != NULL) {
@@ -70,11 +70,11 @@ unsigned int getLength(struct node* linkedList) {
 	return length;
 }
 
-void deleteNode(struct node* linkedList, unsigned int beginIndex, unsigned int length) {
+void deleteNode(LinkedList* plinkedList, unsigned int beginIndex, unsigned int length) {
 	struct node* previousNode = NULL;
-	struct node* currentNode = linkedList;
+	struct node* currentNode = *plinkedList;
 	if (beginIndex != 0) {
-		previousNode = getNode(linkedList, beginIndex - 1);
+		previousNode = getNode(*plinkedList, beginIndex - 1);
 		currentNode = (*previousNode).next;
 	}
 	for (unsigned int i = 0; i < length; i++) {
@@ -86,9 +86,12 @@ void deleteNode(struct node* linkedList, unsigned int beginIndex, unsigned int l
 	if (previousNode != NULL) {
 		(*previousNode).next = currentNode;
 	}
+	else {
+		*plinkedList = currentNode;
+	}
 }
 
-struct node* getNode(struct node* linkedList, unsigned int index) {
+struct node* getNode(LinkedList linkedList, unsigned int index) {
 	struct node* selectedNode = linkedList;
 	for (unsigned int i = 0; i < index; i++) {
 		selectedNode = (*selectedNode).next;
@@ -96,9 +99,9 @@ struct node* getNode(struct node* linkedList, unsigned int index) {
 	return selectedNode;
 }
 
-void deleteLinkedList(struct node* linkedList) {
+void deleteLinkedList(LinkedList* plinkedList) {
 	struct node* currentNode = NULL;
-	struct node* nextNode = linkedList;
+	struct node* nextNode = *plinkedList;
 	do {
 		currentNode = nextNode;
 		nextNode = (*currentNode).next;
@@ -107,4 +110,26 @@ void deleteLinkedList(struct node* linkedList) {
 		}
 		free(currentNode);
 	} while (nextNode != NULL);
+	*plinkedList = NULL;
+}
+
+int addNode(LinkedList* plinkedList, void* pdata, unsigned int beginIndex, unsigned int size, unsigned int length) {
+	struct node* frontNode = NULL;
+	struct node* afterNode = *plinkedList;
+	if (beginIndex != 0) {
+		frontNode = getNode(*plinkedList, beginIndex - 1);
+		afterNode = (*frontNode).next;
+	}
+	struct node* newList = newLinkedList(pdata, size, length);
+	if (newList == NULL) {
+		return 1;
+	}
+	if (frontNode != NULL) {
+		(*frontNode).next = newList;
+	}
+	else {
+		*plinkedList = newList;
+	}
+	(*getNode(newList, length - 1)).next = afterNode;
+	return 0;
 }
