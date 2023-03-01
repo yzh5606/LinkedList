@@ -14,7 +14,7 @@ int main() {
 	addNode(&arrList, arr, 1, sizeof(int), 4);
 	printf("%d\n", *((int*)getData(arrList, 0)));
 	printf("%d\n", *((int*)getData(arrList, 1)));
-	for (int i = 0; i < getLength(arrList); i++) {
+	for (unsigned int i = 0; i < getLength(arrList); i++) {
 		printf("%d", *((int*)getData(arrList, i)));
 	}
 }
